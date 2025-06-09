@@ -1,0 +1,41 @@
+module.exports = {
+  name: "DSCar",
+  slug: "dscar",
+  version: "1.0.0",
+  orientation: "portrait",
+  icon: "./assets/icon.png",
+  userInterfaceStyle: "light",
+  splash: {
+    image: "./assets/splash.png",
+    resizeMode: "contain",
+    backgroundColor: "#ffffff",
+  },
+  assetBundlePatterns: ["**/*"],
+  ios: {
+    supportsTablet: true,
+    bundleIdentifier: "com.dscar.app",
+  },
+  android: {
+    adaptiveIcon: {
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#ffffff",
+    },
+    package: "com.dscar.app",
+  },
+  web: {
+    favicon: "./assets/favicon.png",
+  },
+  plugins: [
+    "expo-router",
+    [
+      "expo-screen-orientation",
+      {
+        initialOrientation: "DEFAULT",
+      },
+    ],
+  ],
+  scheme: "dscar",
+  experiments: {
+    typedRoutes: true,
+  },
+};

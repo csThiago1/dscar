@@ -1,41 +1,45 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Drawer } from 'expo-router/drawer';
-import React from 'react';
+import { Tabs } from 'expo-router';
 
 export default function AppLayout() {
   return (
-    <Drawer
+    <Tabs
       screenOptions={{
-        headerShown: true,
-        drawerActiveTintColor: '#007bff',
-        drawerInactiveTintColor: '#8e8e93',
-        drawerLabelStyle: {
-          marginLeft: -20,
-          fontSize: 16,
-        },
+        headerShown: false,
+        tabBarActiveTintColor: '#2563eb',
+        tabBarInactiveTintColor: '#64748b',
       }}
     >
-      <Drawer.Screen
-        name="menu"
+      <Tabs.Screen
+        name="ordens-servico"
         options={{
-          drawerLabel: 'Dashboard',
-          title: 'Dashboard',
-          drawerIcon: ({ size, color }: { size: number; color: string }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="os"
-        options={{
-          drawerLabel: 'Ordens de Serviço',
           title: 'Ordens de Serviço',
-          drawerIcon: ({ size, color }: { size: number; color: string }) => (
-            <Ionicons name="build-outline" size={size} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="document-text" size={size} color={color} />
           ),
         }}
       />
-      {/* Adicione outras telas do menu aqui (Clientes, Veículos, etc.) */}
-    </Drawer>
+      <Tabs.Screen
+        name="clientes"
+        options={{
+          title: 'Clientes',
+          tabBarIcon: ({ color, size }) => <Ionicons name="people" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="veiculos"
+        options={{
+          title: 'Veículos',
+          tabBarIcon: ({ color, size }) => <Ionicons name="car" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="agendamentos"
+        options={{
+          title: 'Agendamentos',
+          tabBarIcon: ({ color, size }) => <Ionicons name="calendar" size={size} color={color} />,
+        }}
+      />
+    </Tabs>
   );
 }

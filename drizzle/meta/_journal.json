@@ -8,6 +8,20 @@
       "when": 1710711600000,
       "tag": "0000_initial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749519965941,
+      "tag": "0001_stale_micromacro",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749520108249,
+      "tag": "0002_public_mulholland_black",
+      "breakpoints": true
     }
   ]
 }

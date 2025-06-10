@@ -100,12 +100,12 @@ export const clientes = pgTable(
   'clientes',
   {
     id: serial('id').primaryKey(),
-    nomeRazaoSocial: varchar('nome_razao_social', { length: 255 }).notNull(),
+    nomeRazaoSocial: varchar('nome_razao_social', { length: 100 }).notNull(),
     tipoDocumento: tipoDocumentoEnum('tipo_documento').notNull(),
     documento: varchar('documento', { length: 14 }).notNull().unique(),
-    telefonePrincipal: varchar('telefone_principal', { length: 20 }).notNull(),
+    telefonePrincipal: varchar('telefone_principal', { length: 15 }).notNull(),
     telefoneSecundario: varchar('telefone_secundario', { length: 15 }),
-    email: varchar('email', { length: 255 }),
+    email: varchar('email', { length: 100 }),
     endereco: text('endereco'),
     observacoes: text('observacoes'),
     isAtivo: boolean('is_ativo').default(true).notNull(),
@@ -125,10 +125,10 @@ export const veiculos = pgTable(
       .references(() => clientes.id)
       .notNull(),
     placa: varchar('placa', { length: 10 }).notNull().unique(),
-    marca: varchar('marca', { length: 100 }).notNull(),
-    modelo: varchar('modelo', { length: 100 }).notNull(),
+    marca: varchar('marca', { length: 50 }).notNull(),
+    modelo: varchar('modelo', { length: 50 }).notNull(),
     versao: varchar('versao', { length: 50 }),
-    ano: integer('ano'),
+    ano: integer('ano').notNull(),
     anoFabricacao: integer('ano_fabricacao').notNull(),
     anoModelo: integer('ano_modelo').notNull(),
     cor: varchar('cor', { length: 50 }),
@@ -151,7 +151,7 @@ export const pecas = pgTable(
   'pecas',
   {
     id: serial('id').primaryKey(),
-    codigo: varchar('codigo', { length: 30 }).notNull().unique(),
+    codigo: varchar('codigo', { length: 50 }).notNull().unique(),
     nome: varchar('nome', { length: 100 }).notNull(),
     descricao: text('descricao'),
     unidadeMedida: unidadeMedidaEnum('unidade_medida').notNull(),
@@ -283,12 +283,12 @@ export type NovaPecaUtilizada = typeof pecasUtilizadas.$inferInsert;
 
 // Relacionamentos
 export const clientesRelations = relations(clientes, ({ many }) => ({
-  veiculosComoProprietario: many(veiculos),
-  osComoClienteAtendimento: many(ordensServico),
+  veiculos: many(veiculos),
+  ordensServico: many(ordensServico),
 }));
 
 export const veiculosRelations = relations(veiculos, ({ one, many }) => ({
-  proprietarioPrincipal: one(clientes, {
+  cliente: one(clientes, {
     fields: [veiculos.clienteId],
     references: [clientes.id],
   }),
@@ -307,14 +307,18 @@ export const ordensServicoRelations = relations(ordensServico, ({ one, many }) =
   pecasUtilizadas: many(pecasUtilizadas),
 }));
 
+export const pecasRelations = relations(pecas, ({ many }) => ({
+  pecasUtilizadas: many(pecasUtilizadas),
+}));
+
 export const pecasUtilizadasRelations = relations(pecasUtilizadas, ({ one }) => ({
-  peca: one(pecas, {
-    fields: [pecasUtilizadas.pecaId],
-    references: [pecas.id],
-  }),
   ordemServico: one(ordensServico, {
     fields: [pecasUtilizadas.ordemServicoId],
     references: [ordensServico.id],
+  }),
+  peca: one(pecas, {
+    fields: [pecasUtilizadas.pecaId],
+    references: [pecas.id],
   }),
 }));
 

@@ -1,125 +1,126 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useAuthStore } from '../src/stores/auth';
-
-interface MenuItem {
-  title: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  route: string;
-}
-
-const menuItems: MenuItem[] = [
-  {
-    title: 'Ordens de Serviço',
-    icon: 'document-text',
-    route: '/os',
-  },
-  {
-    title: 'Nova OS',
-    icon: 'add-circle',
-    route: '/os/nova',
-  },
-  {
-    title: 'Checklist',
-    icon: 'checkbox',
-    route: '/checklist',
-  },
-  {
-    title: 'Configurações',
-    icon: 'settings',
-    route: '/configuracoes',
-  },
-];
+import { Link, useRouter } from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useAuth } from '../src/contexts/AuthContext';
 
 export default function Menu() {
-  const logout = useAuthStore(state => state.logout);
+  const { signOut } = useAuth();
+  const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.replace('/login');
-  };
+  const menuItems = [
+    {
+      title: 'Ordens de Serviço',
+      icon: 'document-text',
+      route: '/(app)/ordens-servico',
+    },
+    {
+      title: 'Clientes',
+      icon: 'people',
+      route: '/(app)/clientes',
+    },
+    {
+      title: 'Veículos',
+      icon: 'car',
+      route: '/(app)/veiculos',
+    },
+    {
+      title: 'Agendamentos',
+      icon: 'calendar',
+      route: '/(app)/agendamentos',
+    },
+  ];
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>DSCar</Text>
-        <Text style={styles.subtitle}>Menu Principal</Text>
+        <Text style={styles.subtitle}>Sistema de Gestão</Text>
       </View>
 
-      <View style={styles.menuGrid}>
+      <View style={styles.menuContainer}>
         {menuItems.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.menuItem}
-            onPress={() => router.replace(item.route as any)}
-          >
-            <Ionicons name={item.icon} size={32} color="#f4511e" />
-            <Text style={styles.menuItemText}>{item.title}</Text>
-          </TouchableOpacity>
+          <Link key={index} href={item.route} asChild>
+            <TouchableOpacity style={styles.menuItem}>
+              <Ionicons name={item.icon as any} size={24} color="#2563eb" />
+              <Text style={styles.menuText}>{item.title}</Text>
+            </TouchableOpacity>
+          </Link>
         ))}
       </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Ionicons name="log-out" size={24} color="#fff" />
-        <Text style={styles.logoutButtonText}>Sair</Text>
+      <TouchableOpacity style={styles.logoutButton} onPress={signOut}>
+        <Ionicons name="log-out" size={24} color="#ef4444" />
+        <Text style={styles.logoutText}>Sair</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8fafc',
+    padding: 16,
   },
   header: {
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    marginBottom: 32,
+    paddingTop: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 8,
+    color: '#1e293b',
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#64748b',
+    marginTop: 4,
   },
-  menuGrid: {
-    padding: 20,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+  menuContainer: {
+    gap: 12,
   },
   menuItem: {
-    width: '48%',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  menuItemText: {
-    marginTop: 8,
-    fontSize: 14,
-    color: '#333',
-    textAlign: 'center',
-  },
-  logoutButton: {
-    backgroundColor: '#f4511e',
-    margin: 20,
-    padding: 16,
-    borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  logoutButtonText: {
-    color: '#fff',
+  menuText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 8,
+    color: '#1e293b',
+    marginLeft: 12,
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 32,
+    left: 16,
+    right: 16,
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  logoutText: {
+    fontSize: 16,
+    color: '#ef4444',
+    marginLeft: 12,
   },
 });
